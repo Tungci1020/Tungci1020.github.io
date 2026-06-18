@@ -1,0 +1,1096 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>[name] — notes, derivations, afterthoughts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&family=Cormorant+Garamond:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:    #2a2520;
+  --ink-2:  #4a443c;
+  --muted:  #8a8275;
+  --rule:   rgba(42,37,32,0.18);
+  --rule-2: rgba(42,37,32,0.08);
+  --paper:  #f5f0e6;
+  --paper-2:#ebe4d4;
+  --blue:   #728cd7;
+  --blue-2: rgba(114,140,215,0.14);
+  --blue-3: rgba(114,140,215,0.32);
+  --serif:   'EB Garamond', Georgia, serif;
+  --display: 'Cormorant Garamond', 'EB Garamond', Georgia, serif;
+  --mono:    'JetBrains Mono', ui-monospace, monospace;
+  --measure: 60ch;
+  --content: 1080px;
+}
+
+* { box-sizing: border-box; }
+html { background: var(--paper); }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 18px;
+  line-height: 1.6;
+  font-variant-numeric: oldstyle-nums;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+a { color: inherit; text-decoration: none; }
+a:hover { color: var(--blue); }
+
+/* ---------- Layout ---------- */
+.wrap {
+  max-width: var(--content);
+  margin: 0 auto;
+  padding: 36px 48px 64px;
+}
+
+/* ---------- Masthead ---------- */
+.masthead {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--ink);
+  margin-bottom: 40px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.brand .dot {
+  width: 18px; height: 18px;
+  background: var(--blue);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.brand .name {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 30px;
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+.brand .name a:hover { color: var(--ink); }
+.brand .tagline {
+  font-family: var(--serif);
+  font-size: 14px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+nav.primary {
+  display: flex;
+  gap: 28px;
+  font-size: 16px;
+  align-items: baseline;
+}
+nav.primary a {
+  position: relative;
+  padding-bottom: 4px;
+  color: var(--ink-2);
+}
+nav.primary a:hover { color: var(--blue); }
+nav.primary a.active {
+  color: var(--blue);
+}
+nav.primary a.active::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -1px;
+  height: 1.5px;
+  background: var(--blue);
+}
+
+/* ---------- Section header ---------- */
+.section-head {
+  margin-bottom: 40px;
+  padding-left: 38px;
+  position: relative;
+}
+.section-head::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 14px;
+  width: 20px;
+  height: 20px;
+  background: var(--blue);
+}
+.section-head[data-mark="square"]::before { border-radius: 0; }
+.section-head[data-mark="circle"]::before { border-radius: 50%; }
+.section-head[data-mark="triangle"]::before {
+  background: transparent;
+  width: 0; height: 0;
+  border-left: 11px solid transparent;
+  border-right: 11px solid transparent;
+  border-bottom: 18px solid var(--blue);
+}
+.section-head h2 {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 38px;
+  letter-spacing: -0.01em;
+  margin: 0 0 6px;
+  line-height: 1.05;
+}
+.section-head .note {
+  font-size: 15px;
+  color: var(--muted);
+  max-width: 60ch;
+  margin: 0;
+}
+
+/* ---------- Sections + routing ---------- */
+section.view { display: none; }
+section.view.active { display: block; }
+
+.kicker {
+  font-family: var(--serif);
+  font-size: 13px;
+  color: var(--muted);
+  letter-spacing: 0.01em;
+}
+.kicker-rule {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.kicker-rule .line { flex: 1; border-top: 1px solid var(--rule); transform: translateY(-4px); }
+.kicker-rule .right { color: var(--muted); font-size: 13px; }
+
+/* ---------- HOME · Editorial intro ---------- */
+.home {
+  display: grid;
+  grid-template-columns: 1.25fr 0.85fr;
+  gap: 72px;
+  align-items: start;
+}
+.home .intro h1 {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 56px;
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+  margin: 0 0 8px;
+}
+.home .intro .role {
+  font-size: 16px;
+  color: var(--muted);
+  margin: 0 0 22px;
+}
+.home .intro .bio {
+  font-size: 18px;
+  line-height: 1.55;
+  max-width: 52ch;
+  margin: 0 0 14px;
+  color: var(--ink);
+}
+.home .intro .bio + .bio { margin-top: 0; }
+.home .intro .bio a {
+  border-bottom: 1px solid var(--blue);
+  color: var(--blue);
+}
+.home .intro .bio a:hover { background: var(--blue-2); }
+
+.home .side .portrait {
+  width: 80px;
+  height: 80px;
+  border: 1px solid var(--ink);
+  background: var(--blue-2);
+  position: relative;
+  margin-bottom: 22px;
+}
+.home .side .portrait::before,
+.home .side .portrait::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top right, transparent calc(50% - 0.5px), rgba(42,37,32,0.22) calc(50% - 0.5px) calc(50% + 0.5px), transparent calc(50% + 0.5px));
+}
+.home .side .portrait::after {
+  background: linear-gradient(to bottom right, transparent calc(50% - 0.5px), rgba(42,37,32,0.22) calc(50% - 0.5px) calc(50% + 0.5px), transparent calc(50% + 0.5px));
+}
+
+.home .block + .block { margin-top: 28px; }
+.home .block h3 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  margin: 0 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--rule);
+}
+.home .block .list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Education entries: degree on top, school + dates on a second line */
+.home .education .item {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 12px;
+  font-size: 15px;
+  line-height: 1.45;
+  padding: 2px 0;
+}
+.home .education .item .years { color: var(--muted); font-size: 13px; padding-top: 2px; }
+.home .education .item .degree { color: var(--ink); }
+.home .education .item .school { color: var(--muted); font-size: 14px; display: block; }
+
+.home .elsewhere {
+  margin-top: 28px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.home .elsewhere a {
+  color: var(--ink-2);
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 1px;
+  margin-right: 14px;
+}
+.home .elsewhere a:hover { color: var(--blue); border-color: var(--blue); }
+
+/* ---------- STUDY · Categorised list ---------- */
+.study {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 72px;
+}
+.study .rail {
+  position: sticky;
+  top: 32px;
+  align-self: start;
+}
+.study .rail h3 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  margin: 0 0 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--rule);
+}
+.study .rail ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.study .rail li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 16px;
+  cursor: pointer;
+  color: var(--ink-2);
+  transition: color 0.15s ease;
+}
+.study .rail li:hover { color: var(--blue); }
+.study .rail li.active {
+  color: var(--blue);
+  position: relative;
+}
+.study .rail li.active::before {
+  content: "";
+  position: absolute;
+  left: -16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px; height: 8px;
+  background: var(--blue);
+  border-radius: 50%;
+}
+.study .rail .count {
+  font-size: 13px;
+  color: var(--muted);
+}
+.study .rail li.active .count { color: var(--blue); opacity: 0.7; }
+
+.study .feed .entry {
+  display: grid;
+  grid-template-columns: 80px 1fr 90px;
+  gap: 18px;
+  align-items: baseline;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.study .feed .entry:first-child { padding-top: 0; }
+.study .feed .date { color: var(--muted); font-size: 14px; }
+.study .feed .body h4 {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 1.2;
+  letter-spacing: -0.005em;
+  margin: 0 0 6px;
+}
+.study .feed .body p {
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--ink-2);
+  margin: 0;
+  max-width: 56ch;
+}
+.study .feed .tag {
+  font-size: 13px;
+  color: var(--muted);
+  text-align: right;
+  padding-top: 6px;
+}
+.study .feed .tag .cat {
+  display: inline-block;
+  padding: 1px 8px;
+  border: 1px solid var(--rule);
+  font-size: 13px;
+  color: var(--ink-2);
+}
+
+/* Math block */
+.study .feed .body .math {
+  font-family: var(--mono);
+  font-size: 14px;
+  background: var(--blue-2);
+  border-left: 2px solid var(--blue);
+  padding: 8px 14px;
+  margin: 10px 0 0;
+  color: var(--ink);
+  max-width: 56ch;
+}
+
+/* ---------- WRITING · By year ---------- */
+.writing { max-width: 820px; }
+.writing .year {
+  margin-bottom: 56px;
+}
+.writing .year-head {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+.writing .year-head .y {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 32px;
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+.writing .year-head .line { flex: 1; border-top: 1px solid var(--rule); transform: translateY(-6px); }
+.writing .year-head .count { color: var(--muted); font-size: 14px; }
+
+.writing .row {
+  display: grid;
+  grid-template-columns: 80px 18px 1fr 80px;
+  gap: 16px;
+  align-items: baseline;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--rule-2);
+}
+.writing .row:last-child { border-bottom: none; }
+.writing .row .date { color: var(--muted); font-size: 14px; }
+.writing .row .mk {
+  display: inline-block;
+  position: relative;
+  width: 12px;
+  height: 12px;
+  transform: translateY(2px);
+}
+.writing .row .mk.essay { background: var(--blue); border-radius: 50%; }
+.writing .row .mk.note  { background: var(--blue); }
+.writing .row .mk.photo {
+  background: transparent;
+  width: 0; height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-bottom: 12px solid var(--blue);
+}
+.writing .row .ttl {
+  font-size: 17px;
+  line-height: 1.45;
+}
+.writing .row .ttl a:hover { color: var(--blue); }
+.writing .row .ttl .excerpt {
+  display: block;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.4;
+  margin-top: 2px;
+}
+.writing .row .type {
+  text-align: right;
+  font-size: 13px;
+  color: var(--muted);
+}
+.writing .legend {
+  display: flex;
+  gap: 24px;
+  margin-top: 28px;
+  padding-top: 16px;
+  border-top: 1px solid var(--rule);
+  font-size: 13px;
+  color: var(--muted);
+}
+.writing .legend .item { display: flex; align-items: center; gap: 8px; }
+.writing .legend .mk { display: inline-block; }
+.writing .legend .mk.essay { width: 10px; height: 10px; background: var(--blue); border-radius: 50%; }
+.writing .legend .mk.note  { width: 10px; height: 10px; background: var(--blue); }
+.writing .legend .mk.photo {
+  width: 0; height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 10px solid var(--blue);
+}
+
+/* ---------- ARCHIVE · Tag index ---------- */
+.archive .tagbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--rule);
+}
+.archive .tagbar .tag {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 4px 12px;
+  border: 1px solid var(--rule);
+  font-size: 14px;
+  cursor: pointer;
+  background: var(--paper);
+  color: var(--ink-2);
+  transition: all 0.15s ease;
+}
+.archive .tagbar .tag:hover { border-color: var(--blue); color: var(--blue); }
+.archive .tagbar .tag.active {
+  background: var(--blue);
+  color: var(--paper);
+  border-color: var(--blue);
+}
+.archive .tagbar .tag .n {
+  font-size: 12px;
+  color: var(--muted);
+}
+.archive .tagbar .tag.active .n { color: rgba(245,240,230,0.7); }
+
+.archive .index {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 48px 56px;
+}
+.archive .letter h3 {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 32px;
+  letter-spacing: -0.01em;
+  margin: 0 0 14px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--rule);
+  line-height: 1;
+}
+.archive .letter ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.archive .letter li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--rule-2);
+  font-size: 15px;
+  line-height: 1.4;
+}
+.archive .letter li:last-child { border-bottom: none; }
+.archive .letter li .ttl { color: var(--ink-2); }
+.archive .letter li .ttl:hover { color: var(--blue); }
+.archive .letter li .date {
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* ---------- Footer ---------- */
+body.route-home footer.site { display: none; }
+
+footer.site {
+  margin-top: 56px;
+  padding-top: 22px;
+  border-top: 1px solid var(--ink);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 13px;
+  color: var(--muted);
+}
+footer.site .meta { display: flex; gap: 18px; }
+footer.site a { border-bottom: 1px solid var(--rule); padding-bottom: 1px; }
+footer.site a:hover { color: var(--blue); border-color: var(--blue); }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .wrap { padding: 32px 24px 64px; }
+  .masthead { flex-direction: column; align-items: flex-start; gap: 18px; margin-bottom: 40px; }
+  .home { grid-template-columns: 1fr; gap: 48px; }
+  .home .intro h1 { font-size: 48px; }
+  .study { grid-template-columns: 1fr; gap: 32px; }
+  .study .rail { position: static; }
+  .study .rail ul { display: flex; flex-wrap: wrap; gap: 4px 14px; }
+  .study .rail li { padding: 4px 0; }
+  .study .rail li.active::before { display: none; }
+  .study .feed .entry { grid-template-columns: 64px 1fr; }
+  .study .feed .tag { grid-column: 1 / -1; text-align: left; padding-top: 0; padding-left: 80px; }
+  .writing .row { grid-template-columns: 64px 14px 1fr; }
+  .writing .row .type { grid-column: 3; text-align: left; padding-top: 2px; }
+  .archive .index { grid-template-columns: repeat(2, 1fr); gap: 32px; }
+  .section-head h2 { font-size: 30px; }
+  .home .intro .bio { font-size: 17px; }
+}
+@media (max-width: 560px) {
+  .archive .index { grid-template-columns: 1fr; }
+  nav.primary { gap: 18px; font-size: 15px; }
+  .brand .name { font-size: 24px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="brand">
+      <div class="dot"></div>
+      <div>
+        <div class="name"><a href="#home">[your name]</a></div>
+        <div class="tagline">Notes, derivations, and afterthoughts.</div>
+      </div>
+    </div>
+    <nav class="primary" id="nav">
+      <a href="#home" data-route="home">Home</a>
+      <a href="#study" data-route="study">Study</a>
+      <a href="#writing" data-route="writing">Writing</a>
+      <a href="#archive" data-route="archive">Archive</a>
+    </nav>
+  </header>
+
+  <!-- ============ HOME ============ -->
+  <section class="view" id="home" data-screen-label="01 Home">
+    <div class="home">
+      <div class="intro">
+        <h1>[your name].</h1>
+        <p class="role">Physicist — sometime writer. Based somewhere quiet.</p>
+        <p class="bio">
+          I keep this site as a working notebook — somewhere to put down what I'm reading,
+          derive things slowly, and occasionally write at length about how a particular
+          idea has been turning over in my head.
+        </p>
+        <p class="bio">
+          Most of what's here is incomplete on purpose. If something is wrong, I'd like
+          to hear about it — <a href="mailto:hello@example.com">hello@example.com</a>.
+        </p>
+      </div>
+
+      <aside class="side">
+        <div class="portrait" aria-hidden="true"></div>
+
+        <div class="block education">
+          <h3>Education</h3>
+          <div class="list">
+            <div class="item">
+              <span class="years">2024 – 25</span>
+              <span>
+                <span class="degree">MSc, Theoretical Physics</span>
+                <span class="school">University of Edinburgh</span>
+              </span>
+            </div>
+            <div class="item">
+              <span class="years">2020 – 24</span>
+              <span>
+                <span class="degree">BSc (Hons), Physics</span>
+                <span class="school">University of St Andrews</span>
+              </span>
+            </div>
+            <div class="item">
+              <span class="years">Sum. 23</span>
+              <span>
+                <span class="degree">Visiting student</span>
+                <span class="school">DAMTP, University of Cambridge</span>
+              </span>
+            </div>
+            <div class="item">
+              <span class="years">Ongoing</span>
+              <span>
+                <span class="degree">Independent study</span>
+                <span class="school">Path integrals · Differential geometry · QFT</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="elsewhere">
+          <a href="#">arXiv</a>
+          <a href="#">GitHub</a>
+          <a href="#">RSS</a>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ============ STUDY ============ -->
+  <section class="view" id="study" data-screen-label="02 Study">
+    <div class="section-head" data-mark="square">
+      <h2>Study &amp; Research</h2>
+      <p class="note">Physics notes, mathematical derivations, reading summaries, and project logs — kept in the open.</p>
+    </div>
+
+    <div class="study">
+      <aside class="rail">
+        <h3>Categories</h3>
+        <ul id="study-cats">
+          <li class="active" data-cat="all"><span>All</span><span class="count">35</span></li>
+          <li data-cat="physics"><span>Physics</span><span class="count">12</span></li>
+          <li data-cat="mathematics"><span>Mathematics</span><span class="count">7</span></li>
+          <li data-cat="reading"><span>Reading</span><span class="count">9</span></li>
+          <li data-cat="projects"><span>Projects</span><span class="count">4</span></li>
+          <li data-cat="misc"><span>Misc</span><span class="count">3</span></li>
+        </ul>
+      </aside>
+
+      <div class="feed" id="study-feed">
+        <article class="entry" data-cat="physics">
+          <div class="date">21 Apr 2026</div>
+          <div class="body">
+            <h4>A short derivation of the Euler–Lagrange equation</h4>
+            <p>Starting from Hamilton's principle — requiring the action to be stationary under arbitrary variations vanishing at the endpoints — and asking what that forces the integrand to satisfy.</p>
+            <div class="math">δS = 0  ⟹  d/dt (∂L/∂q̇) − ∂L/∂q = 0</div>
+          </div>
+          <div class="tag"><span class="cat">physics</span></div>
+        </article>
+
+        <article class="entry" data-cat="mathematics">
+          <div class="date">17 Apr 2026</div>
+          <div class="body">
+            <h4>Why ε–δ continuity is the right definition</h4>
+            <p>A meander through three failed definitions before landing on the standard one — and why the order of quantifiers really matters here, even if you have seen it many times.</p>
+          </div>
+          <div class="tag"><span class="cat">mathematics</span></div>
+        </article>
+
+        <article class="entry" data-cat="reading">
+          <div class="date">14 Apr 2026</div>
+          <div class="body">
+            <h4>Reading notes — On Growth and Form</h4>
+            <p>D'Arcy Thompson on why physics, not Darwin, often explains form. Marginalia gathered chapter by chapter; an attempt at a summary I can defend in a sentence.</p>
+          </div>
+          <div class="tag"><span class="cat">reading</span></div>
+        </article>
+
+        <article class="entry" data-cat="physics">
+          <div class="date">09 Apr 2026</div>
+          <div class="body">
+            <h4>Noether's theorem, slowly</h4>
+            <p>One symmetry, one conserved current — but the proof is more careful than the slogan. Working it through for a continuous translation symmetry as a warm-up.</p>
+            <div class="math">∂_μ ( ∂L/∂(∂_μ φ) · δφ − L δx^μ ) = 0</div>
+          </div>
+          <div class="tag"><span class="cat">physics</span></div>
+        </article>
+
+        <article class="entry" data-cat="projects">
+          <div class="date">02 Apr 2026</div>
+          <div class="body">
+            <h4>Notebook — building a small two-body simulator</h4>
+            <p>A weekend project: integrate the planar two-body problem with leapfrog, check that the Laplace–Runge–Lenz vector is conserved, and use that as the correctness signal.</p>
+          </div>
+          <div class="tag"><span class="cat">projects</span></div>
+        </article>
+
+        <article class="entry" data-cat="mathematics">
+          <div class="date">28 Mar 2026</div>
+          <div class="body">
+            <h4>Why the action is stationary, not minimal</h4>
+            <p>A small but stubborn misunderstanding cleared up: a stationary point of the action need not be a minimum. The harmonic oscillator past a quarter-period is the canonical counter-example.</p>
+          </div>
+          <div class="tag"><span class="cat">mathematics</span></div>
+        </article>
+
+        <article class="entry" data-cat="reading">
+          <div class="date">22 Mar 2026</div>
+          <div class="body">
+            <h4>Reading notes — Polya, How to Solve It</h4>
+            <p>A re-read after ten years. What I find surprising now is how much of it is about not panicking: every heuristic is, in part, a way of staying patient with an unfamiliar problem.</p>
+          </div>
+          <div class="tag"><span class="cat">reading</span></div>
+        </article>
+
+        <article class="entry" data-cat="misc">
+          <div class="date">14 Mar 2026</div>
+          <div class="body">
+            <h4>On keeping a paper notebook in parallel</h4>
+            <p>Why I still write derivations by hand first, and what I lose if I skip that step.</p>
+          </div>
+          <div class="tag"><span class="cat">misc</span></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WRITING ============ -->
+  <section class="view" id="writing" data-screen-label="03 Writing">
+    <div class="section-head" data-mark="triangle">
+      <h2>Writing &amp; Life</h2>
+      <p class="note">Longer essays, shorter reflections, and the occasional photograph — kept in a single stream, organised by year.</p>
+    </div>
+
+    <div class="writing">
+      <div class="year">
+        <div class="year-head">
+          <div class="y">2026</div>
+          <div class="line"></div>
+          <div class="count">9 entries</div>
+        </div>
+
+        <div class="row">
+          <div class="date">21 Apr</div>
+          <div><span class="mk essay"></span></div>
+          <div class="ttl">
+            <a href="#">On slow thinking, and the cost of cleverness</a>
+            <span class="excerpt">A defence of taking the long route, and against the small dishonesty of pretending I always saw it that way from the start.</span>
+          </div>
+          <div class="type">essay</div>
+        </div>
+
+        <div class="row">
+          <div class="date">14 Apr</div>
+          <div><span class="mk note"></span></div>
+          <div class="ttl">
+            <a href="#">A small ritual for finishing things</a>
+          </div>
+          <div class="type">note</div>
+        </div>
+
+        <div class="row">
+          <div class="date">06 Apr</div>
+          <div><span class="mk essay"></span></div>
+          <div class="ttl">
+            <a href="#">Reading notes — On Growth and Form</a>
+            <span class="excerpt">D'Arcy Thompson on why physics, not Darwin, often explains form.</span>
+          </div>
+          <div class="type">essay</div>
+        </div>
+
+        <div class="row">
+          <div class="date">02 Apr</div>
+          <div><span class="mk photo"></span></div>
+          <div class="ttl"><a href="#">Coastal walk — Berwickshire</a></div>
+          <div class="type">photo</div>
+        </div>
+
+        <div class="row">
+          <div class="date">28 Mar</div>
+          <div><span class="mk note"></span></div>
+          <div class="ttl"><a href="#">Three quiet lessons from a year of running</a></div>
+          <div class="type">note</div>
+        </div>
+
+        <div class="row">
+          <div class="date">18 Mar</div>
+          <div><span class="mk essay"></span></div>
+          <div class="ttl">
+            <a href="#">Why I keep a working notebook in public</a>
+            <span class="excerpt">A short essay on the strange discipline of writing for a stranger who might or might not exist.</span>
+          </div>
+          <div class="type">essay</div>
+        </div>
+
+        <div class="row">
+          <div class="date">09 Mar</div>
+          <div><span class="mk note"></span></div>
+          <div class="ttl"><a href="#">On reading the same book twice</a></div>
+          <div class="type">note</div>
+        </div>
+
+        <div class="row">
+          <div class="date">22 Feb</div>
+          <div><span class="mk photo"></span></div>
+          <div class="ttl"><a href="#">A morning in Stockbridge</a></div>
+          <div class="type">photo</div>
+        </div>
+
+        <div class="row">
+          <div class="date">04 Feb</div>
+          <div><span class="mk essay"></span></div>
+          <div class="ttl">
+            <a href="#">The slow project — a manifesto for personal sites</a>
+            <span class="excerpt">Against the deadline. For the small private record that improves with time.</span>
+          </div>
+          <div class="type">essay</div>
+        </div>
+      </div>
+
+      <div class="year">
+        <div class="year-head">
+          <div class="y">2025</div>
+          <div class="line"></div>
+          <div class="count">14 entries</div>
+        </div>
+
+        <div class="row">
+          <div class="date">28 Dec</div>
+          <div><span class="mk essay"></span></div>
+          <div class="ttl"><a href="#">A year of small derivations</a><span class="excerpt">A retrospective on what stuck, and what didn't, from the previous twelve months of study.</span></div>
+          <div class="type">essay</div>
+        </div>
+
+        <div class="row">
+          <div class="date">14 Nov</div>
+          <div><span class="mk note"></span></div>
+          <div class="ttl"><a href="#">On the difference between studying and reading</a></div>
+          <div class="type">note</div>
+        </div>
+
+        <div class="row">
+          <div class="date">02 Oct</div>
+          <div><span class="mk essay"></span></div>
+          <div class="ttl"><a href="#">Notes from a quiet October</a></div>
+          <div class="type">essay</div>
+        </div>
+
+        <div class="row">
+          <div class="date">19 Aug</div>
+          <div><span class="mk photo"></span></div>
+          <div class="ttl"><a href="#">A week in the Western Isles</a></div>
+          <div class="type">photo</div>
+        </div>
+
+        <div class="row">
+          <div class="date">07 Jul</div>
+          <div><span class="mk note"></span></div>
+          <div class="ttl"><a href="#">Three habits I've kept; one I've quietly dropped</a></div>
+          <div class="type">note</div>
+        </div>
+
+        <div class="row">
+          <div class="date">12 May</div>
+          <div><span class="mk essay"></span></div>
+          <div class="ttl"><a href="#">A defence of the long-form</a><span class="excerpt">Why I distrust posts that fit in a single screen, and what that distrust is really about.</span></div>
+          <div class="type">essay</div>
+        </div>
+      </div>
+
+      <div class="year">
+        <div class="year-head">
+          <div class="y">2024</div>
+          <div class="line"></div>
+          <div class="count">8 entries</div>
+        </div>
+
+        <div class="row">
+          <div class="date">22 Dec</div>
+          <div><span class="mk essay"></span></div>
+          <div class="ttl"><a href="#">Beginning, again</a><span class="excerpt">An opening note — what this site is, and what I'm not going to do with it.</span></div>
+          <div class="type">essay</div>
+        </div>
+
+        <div class="row">
+          <div class="date">04 Nov</div>
+          <div><span class="mk note"></span></div>
+          <div class="ttl"><a href="#">On rebuilding a personal site, slowly</a></div>
+          <div class="type">note</div>
+        </div>
+      </div>
+
+      <div class="legend">
+        <div class="item"><span class="mk essay"></span>essay</div>
+        <div class="item"><span class="mk note"></span>note</div>
+        <div class="item"><span class="mk photo"></span>photo</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ARCHIVE ============ -->
+  <section class="view" id="archive" data-screen-label="04 Archive">
+    <div class="section-head" data-mark="circle">
+      <h2>Archive</h2>
+      <p class="note">Everything on the site, alphabetical, indexed by tag.</p>
+    </div>
+
+    <div class="archive">
+      <div class="tagbar" id="tagbar">
+        <span class="tag active" data-tag="all">All <span class="n">39</span></span>
+        <span class="tag" data-tag="essay">Essays <span class="n">12</span></span>
+        <span class="tag" data-tag="note">Notes <span class="n">10</span></span>
+        <span class="tag" data-tag="photo">Photos <span class="n">5</span></span>
+        <span class="tag" data-tag="physics">Physics <span class="n">12</span></span>
+        <span class="tag" data-tag="mathematics">Mathematics <span class="n">7</span></span>
+        <span class="tag" data-tag="reading">Reading <span class="n">9</span></span>
+        <span class="tag" data-tag="projects">Projects <span class="n">4</span></span>
+      </div>
+
+      <div class="index" id="archive-index">
+        <div class="letter">
+          <h3>A</h3>
+          <ul>
+            <li data-tags="note"><a class="ttl" href="#">A morning in Stockbridge</a><span class="date">02·22</span></li>
+            <li data-tags="note"><a class="ttl" href="#">A small ritual for finishing things</a><span class="date">04·14</span></li>
+            <li data-tags="physics"><a class="ttl" href="#">A short derivation of the Euler–Lagrange equation</a><span class="date">04·21</span></li>
+            <li data-tags="photo"><a class="ttl" href="#">A week in the Western Isles</a><span class="date">08·19</span></li>
+            <li data-tags="essay"><a class="ttl" href="#">A year of small derivations</a><span class="date">12·28</span></li>
+          </ul>
+        </div>
+
+        <div class="letter">
+          <h3>B</h3>
+          <ul>
+            <li data-tags="essay"><a class="ttl" href="#">Beginning, again</a><span class="date">12·22</span></li>
+          </ul>
+        </div>
+
+        <div class="letter">
+          <h3>C</h3>
+          <ul>
+            <li data-tags="photo"><a class="ttl" href="#">Coastal walk — Berwickshire</a><span class="date">04·02</span></li>
+          </ul>
+        </div>
+
+        <div class="letter">
+          <h3>D</h3>
+          <ul>
+            <li data-tags="essay"><a class="ttl" href="#">A defence of the long-form</a><span class="date">05·12</span></li>
+          </ul>
+        </div>
+
+        <div class="letter">
+          <h3>N</h3>
+          <ul>
+            <li data-tags="essay"><a class="ttl" href="#">Notes from a quiet October</a><span class="date">10·02</span></li>
+            <li data-tags="physics"><a class="ttl" href="#">Noether's theorem, slowly</a><span class="date">04·09</span></li>
+            <li data-tags="projects"><a class="ttl" href="#">Notebook — building a small two-body simulator</a><span class="date">04·02</span></li>
+          </ul>
+        </div>
+
+        <div class="letter">
+          <h3>O</h3>
+          <ul>
+            <li data-tags="essay"><a class="ttl" href="#">On slow thinking, and the cost of cleverness</a><span class="date">04·21</span></li>
+            <li data-tags="note"><a class="ttl" href="#">On reading the same book twice</a><span class="date">03·09</span></li>
+            <li data-tags="note"><a class="ttl" href="#">On the difference between studying and reading</a><span class="date">11·14</span></li>
+            <li data-tags="note"><a class="ttl" href="#">On keeping a paper notebook in parallel</a><span class="date">03·14</span></li>
+            <li data-tags="note"><a class="ttl" href="#">On rebuilding a personal site, slowly</a><span class="date">11·04</span></li>
+          </ul>
+        </div>
+
+        <div class="letter">
+          <h3>R</h3>
+          <ul>
+            <li data-tags="reading"><a class="ttl" href="#">Reading notes — On Growth and Form</a><span class="date">04·06</span></li>
+            <li data-tags="reading"><a class="ttl" href="#">Reading notes — Polya, How to Solve It</a><span class="date">03·22</span></li>
+          </ul>
+        </div>
+
+        <div class="letter">
+          <h3>T</h3>
+          <ul>
+            <li data-tags="note"><a class="ttl" href="#">Three habits I've kept; one I've quietly dropped</a><span class="date">07·07</span></li>
+            <li data-tags="note"><a class="ttl" href="#">Three quiet lessons from a year of running</a><span class="date">03·28</span></li>
+            <li data-tags="essay"><a class="ttl" href="#">The slow project — a manifesto for personal sites</a><span class="date">02·04</span></li>
+          </ul>
+        </div>
+
+        <div class="letter">
+          <h3>W</h3>
+          <ul>
+            <li data-tags="essay"><a class="ttl" href="#">Why I keep a working notebook in public</a><span class="date">03·18</span></li>
+            <li data-tags="mathematics"><a class="ttl" href="#">Why the action is stationary, not minimal</a><span class="date">03·28</span></li>
+            <li data-tags="mathematics"><a class="ttl" href="#">Why ε–δ continuity is the right definition</a><span class="date">04·17</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site">
+    <div class="meta">
+      <span>© [your name] · 2024 – 2026</span>
+      <a href="#">RSS</a>
+      <a href="#">Colophon</a>
+    </div>
+    <div>Set in EB Garamond + Cormorant Garamond.</div>
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  const views = Array.from(document.querySelectorAll('section.view'));
+  const navLinks = Array.from(document.querySelectorAll('nav.primary a'));
+
+  function show(route) {
+    const target = views.find(v => v.id === route) || views[0];
+    views.forEach(v => v.classList.toggle('active', v === target));
+    navLinks.forEach(a => a.classList.toggle('active', a.dataset.route === target.id));
+    document.body.classList.toggle('route-home', target.id === 'home');
+    window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+  }
+  function routeFromHash() {
+    const h = (window.location.hash || '#home').slice(1);
+    return ['home','study','writing','archive'].includes(h) ? h : 'home';
+  }
+
+  window.addEventListener('hashchange', () => show(routeFromHash()));
+  show(routeFromHash());
+
+  // Study: category filter
+  const cats = document.getElementById('study-cats');
+  const feed = document.getElementById('study-feed');
+  if (cats && feed) {
+    cats.addEventListener('click', (e) => {
+      const li = e.target.closest('li');
+      if (!li) return;
+      cats.querySelectorAll('li').forEach(x => x.classList.toggle('active', x === li));
+      const cat = li.dataset.cat;
+      Array.from(feed.children).forEach(entry => {
+        entry.style.display = (cat === 'all' || entry.dataset.cat === cat) ? '' : 'none';
+      });
+    });
+  }
+
+  // Archive: tag filter
+  const tagbar = document.getElementById('tagbar');
+  const index = document.getElementById('archive-index');
+  if (tagbar && index) {
+    tagbar.addEventListener('click', (e) => {
+      const t = e.target.closest('.tag');
+      if (!t) return;
+      tagbar.querySelectorAll('.tag').forEach(x => x.classList.toggle('active', x === t));
+      const want = t.dataset.tag;
+      index.querySelectorAll('.letter').forEach(col => {
+        let visible = 0;
+        col.querySelectorAll('li').forEach(li => {
+          const tags = (li.dataset.tags || '').split(/\s+/);
+          const ok = want === 'all' || tags.includes(want);
+          li.style.display = ok ? '' : 'none';
+          if (ok) visible++;
+        });
+        col.style.display = visible ? '' : 'none';
+      });
+    });
+  }
+})();
+</script>
+</body>
+</html>
