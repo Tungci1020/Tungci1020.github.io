@@ -202,19 +202,9 @@ section.view.active { display: block; }
   width: 80px;
   height: 80px;
   border: 1px solid var(--ink);
-  background: var(--blue-2);
+  background: url('Avatar.JPEG') center / cover no-repeat;
   position: relative;
   margin-bottom: 22px;
-}
-.home .side .portrait::before,
-.home .side .portrait::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top right, transparent calc(50% - 0.5px), rgba(42,37,32,0.22) calc(50% - 0.5px) calc(50% + 0.5px), transparent calc(50% + 0.5px));
-}
-.home .side .portrait::after {
-  background: linear-gradient(to bottom right, transparent calc(50% - 0.5px), rgba(42,37,32,0.22) calc(50% - 0.5px) calc(50% + 0.5px), transparent calc(50% + 0.5px));
 }
 
 .home .block + .block { margin-top: 28px; }
